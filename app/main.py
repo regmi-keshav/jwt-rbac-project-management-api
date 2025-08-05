@@ -1,17 +1,18 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from app.db.database import test_connection
+from .db.database import create_db_and_tables
+from .auth.auth_router import router as auth_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Test DB connection
-    test_connection()
+    create_db_and_tables()
     yield
 
 app = FastAPI(
     title="FastAPI RBAC - Project Management App",
     lifespan=lifespan
 )
+app.include_router(auth_router)
 
 @app.get("/")
 def root():

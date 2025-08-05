@@ -1,15 +1,14 @@
-from sqlmodel import create_engine
-from sqlalchemy.exc import OperationalError
+from sqlmodel import SQLModel, create_engine, Session
 from app.config import get_settings
+from app.models import user
 
 settings = get_settings()
-engine = create_engine(settings.database_url, echo=True)
 
-def test_connection():
-    try:
-        with engine.connect() as connection:
-            print("Database connection successful.")
-    except OperationalError as e:
-        print("Database connection failed:")
-        print(e)
+engine = create_engine(settings.database_url, echo=False)
 
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
+def get_session():
+    with Session(engine) as session:
+        yield session
