@@ -14,6 +14,15 @@ class UserLogin(BaseModel):
     username: str
     password: str
 
-class TokenResponse(BaseModel):
+class UserRead(BaseModel):
+    id: int
+    username: str
+    role: RoleEnum
+
+    model_config = {
+        "from_attributes": True
+    }
+    
+class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
