@@ -21,11 +21,12 @@ def create_project(data: ProjectCreate, session: Session, owner_id: int) -> Proj
         )
     return ProjectRead.model_validate(project)
 
-def get_projects(session: Session, owner_id: int) -> List[ProjectRead]:
-    # Retrieve all projects for the given owner
-    statement = select(Project).where(Project.owner_id == owner_id)
+def get_projects(session: Session) -> List[ProjectRead]:
+    # Retrieve all projects from the database
+    statement = select(Project)
     projects = session.exec(statement).all()
     return [ProjectRead.model_validate(p) for p in projects]
+
 
 def update_project(project_id: int, data: ProjectUpdate, session: Session, owner_id: int) -> ProjectRead:
     # Fetch project by ID and owner
